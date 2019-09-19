@@ -2,7 +2,7 @@
 # @Author  : LG
 import torch
 from torch.optim.lr_scheduler import MultiStepLR
-from Data import Our_Dataloader
+from Data import our_dataloader
 from .struct import multiboxloss
 from Utils.visdom_op import visdom_line, setup_visdom, visdom_bar
 from torch import nn
@@ -87,7 +87,7 @@ class Trainer(object):
             # raise TypeError('请用 DataParallel 包装模型. eg: model = DataParallel(model, device_ids=[0,1,2]),使用device_ids指定需要使用的gpu')
             model = DataParallel(model, device_ids=self.train_devices)
         self.model = model
-        data_loader = Our_Dataloader(dataset, batch_size=self.batch_size, shuffle=True)
+        data_loader = our_dataloader(dataset, batch_size=self.batch_size, shuffle=True)
         print(' Max_iter = {}, Batch_size = {}'.format(self.iterations, self.batch_size))
         print(' Model will train on cuda:{}'.format(self.train_devices))
 
@@ -166,7 +166,7 @@ class Trainer(object):
         """
         if not neg_pos_ratio:
             neg_pos_ratio = self.cfg.TRAIN.NEG_POS_RATIO
-        self.loss_func = multiboxloss(neg_pos_ratio=neg_pos_ratio)
+        self.loss_func = multiboxloss(self.cfg)
         # print(' Trainer set loss_func : {}, neg_pos_ratio = {}'.format('multiboxloss', neg_pos_ratio))
 
     def set_scheduler(self, lr_steps=None, gamma=None):

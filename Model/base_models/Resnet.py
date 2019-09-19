@@ -5,6 +5,7 @@ from torch.utils.model_zoo import load_url
 from torch.nn import functional as F
 import wget
 import os
+from Configs import _C as cfg
 
 __all__ = ['build_resnet']
 
@@ -208,19 +209,19 @@ class ResNet(nn.Module):
     def load_weights(self):
         url = model_urls['resnet18']
         weight_name = url.split('/')[-1]
-        weight_path = self.cfg.FILE.PRETRAIN_WEIGHT_ROOT
+        weight_path = cfg.FILE.PRETRAIN_WEIGHT_ROOT
         weight_file = os.path.join(weight_path, weight_name)
 
         if not os.path.exists(weight_file):
             if not os.path.exists(weight_path):
                 os.makedirs(weight_path)
 
-            print('{} no exist ,downloading .....'.format(weight_name))
+            print(' {} no exist ,downloading .....'.format(weight_name))
             wget.download(url=url, out=weight_file)
 
-            print('donwload finish')
+            print(' --- donwload to {} finish --- '.format(weight_file))
         self.load_state_dict(torch.load(weight_file), strict=False)
-        print(' --- load weight finish ---')
+        print(' --- load weight finish --- ')
 
 
 def build_resnet(arch, pretrained=False, **kwargs):
@@ -242,7 +243,7 @@ def build_resnet(arch, pretrained=False, **kwargs):
 
 if __name__ == '__main__':
     import torch
-    net = build_resnet('resnet18')
+    net = build_resnet('resnet18',pretrained=False)
     c3,c4,c5,p6,p7=net(torch.ones((1,3,600,600)))
     print(c3.size())
     print(c4.size())

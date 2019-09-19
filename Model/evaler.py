@@ -6,7 +6,7 @@ from Utils import eval_detection_voc
 from tqdm import tqdm
 from torch.nn import DataParallel
 from torch import nn
-from Data import Our_Dataloader_test
+from Data import our_dataloader_test
 from .struct import postprocessor
 
 
@@ -36,7 +36,7 @@ class Evaler(object):
             model = DataParallel(model, device_ids=self.eval_devices)
         else:
             model = DataParallel(model.module, device_ids=self.eval_devices)
-        test_loader = Our_Dataloader_test(dataset=test_dataset, batch_size=20)
+        test_loader = our_dataloader_test(dataset=test_dataset, batch_size=20)
         results_dict = self.eval_model_inference(model, data_loader=test_loader)
         result = cal_ap_map(results_dict, test_dataset=test_loader.dataset)
         ap, map = result['ap'], result['map']

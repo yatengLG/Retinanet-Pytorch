@@ -5,7 +5,7 @@ import torch
 from torch.nn import functional as F
 
 class focal_loss(nn.Module):
-    def __init__(self, alpha=0.25, gamma=2, num_classes = 3, size_average=True):
+    def __init__(self, alpha=0.25, gamma=2, num_classes = 3, reduction='mean'):
         """
         focal_loss损失函数, -α(1-yi)**γ *ce_loss(xi,yi)
         步骤详细的实现了 focal_loss损失函数.
@@ -15,7 +15,7 @@ class focal_loss(nn.Module):
         :param size_average:    损失计算方式,默认取均值
         """
         super(focal_loss,self).__init__()
-        self.size_average = size_average
+        self.reduction = reduction
         if isinstance(alpha,list):
             assert len(alpha)==num_classes   # α可以以list方式输入,size:[num_classes] 用于对不同类别精细地赋予权重
             print("Focal_loss alpha = {}, 将对每一类权重进行精细化赋值".format(alpha))
@@ -48,9 +48,9 @@ class focal_loss(nn.Module):
         loss = -torch.mul(torch.pow((1-preds_softmax), self.gamma), preds_logsoft)  # torch.pow((1-preds_softmax), self.gamma) 为focal loss中 (1-pt)**γ
 
         loss = torch.mul(self.alpha, loss.t())
-        if self.size_average:
+        if self.reduction== 'mean':
             loss = loss.mean()
-        else:
+        elif self.reduction== 'sum':
             loss = loss.sum()
         return loss
 

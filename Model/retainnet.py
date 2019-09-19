@@ -4,21 +4,29 @@
 from .base_models import build_resnet
 from .struct import fpn, predictor, postprocessor
 from torch import nn
-from Data.Transfroms import Tramsfrom
+from Data.Transfroms import transfrom
 from vizer.draw import draw_boxes
 import torch
 from PIL import Image
 import numpy as np
 import time
-from Configs import _C as cfg
 
 class RetainNet(nn.Module):
     """
     :return cls_logits, torch.Size([C, 67995, num_classes])
             bbox_pred,  torch.Size([C, 67995, 4])
     """
-    def __init__(self,resnet='resnet50'):
+    def __init__(self,cfg=None, resnet=None):
         super(RetainNet,self).__init__()
+        self.resnet = 'resnet50'
+        self.num_classes = 21
+        self.num_anchors = 9
+        if cfg:
+            self.resnet = cfg.MODEL.BASEMODEL
+            self.num_classes = cfg.DATA.DATASET.NUM_CLASSES
+            self.num_anchors = cfg.MODEL.ANCHORS.NUMS
+        if resnet:
+            self.resnet = resnet
 
         expansion_list={
             'resnet18': 1,
@@ -27,16 +35,16 @@ class RetainNet(nn.Module):
             'resnet101': 4,
             'resnet152': 4,
         }
-        assert resnet in expansion_list
+        assert self.resnet in expansion_list
 
-        self.backbone = build_resnet(resnet)
-        expansion = expansion_list[resnet]
+        self.backbone = build_resnet(self.resnet)
+        expansion = expansion_list[self.resnet]
         self.fpn = fpn(channels_of_fetures=[128*expansion, 256*expansion, 512*expansion])
-        self.predictor = predictor(num_anchors=9, num_classes=21)
+        self.predictor = predictor(num_anchors=self.num_anchors, num_classes=self.num_classes)  # num_anchors 默认为9,与anchor生成相对应
         self.postprocessor = postprocessor(cfg)
     def forward(self, x):
-        c3, c4, c5, p6, p7 = self.backbone(x)
-        p3, p4, p5 = self.fpn([c3, c4, c5])
+        c3, c4, c5, p6, p7 = self.backbone(x)   # resnet输出五层特征图
+        p3, p4, p5 = self.fpn([c3, c4, c5])     # 前三层特征图进FPN
         features = [p3, p4, p5, p6, p7]
         cls_logits, bbox_pred = self.predictor(features)
         return cls_logits, bbox_pred
@@ -68,7 +76,7 @@ class RetainNet(nn.Module):
         self.eval()
         assert isinstance(image, Image.Image)
         w, h = image.width, image.height
-        images_tensor = Tramsfrom(self.cfg, is_train=False)(np.array(image))[0].unsqueeze(0)
+        images_tensor = transfrom(self.cfg, is_train=False)(np.array(image))[0].unsqueeze(0)
 
         self.to(device)
         images_tensor = images_tensor.to(device)

@@ -6,7 +6,7 @@ from torch.utils.data.sampler import RandomSampler, SequentialSampler
 from torch.utils.data import Sampler
 from torch.utils.data.dataloader import default_collate   # 这个不用管，只是显示问题，实际可以使用
 
-__all__ = ['Our_Dataloader', 'Our_Dataloader_test']
+__all__ = ['our_dataloader', 'our_dataloader_test']
 
 class BatchSampler_Our(Sampler):
     """
@@ -92,7 +92,7 @@ class BatchCollator:
         return images, boxes, labels, img_ids
 
 
-def Our_Dataloader(dataset,batch_size,shuffle=True,num_workers=2,drop_last=True,max_iteration=100000000):
+def our_dataloader(dataset,batch_size,shuffle=True,num_workers=2,drop_last=True,max_iteration=100000000):
     """
     几近无限迭代器,迭代次数为1亿次,每次迭代输出一个批次的数据.
     :param dataset:         数据集
@@ -114,7 +114,7 @@ def Our_Dataloader(dataset,batch_size,shuffle=True,num_workers=2,drop_last=True,
     loader = DataLoader(dataset=dataset,batch_sampler=batch_sampler,num_workers=num_workers,collate_fn=BatchCollator(is_train=dataset.is_train))
     return loader
 
-def Our_Dataloader_test(dataset,batch_size,shuffle=False,get_box_label=True,num_workers=2,drop_last=False):
+def our_dataloader_test(dataset,batch_size,shuffle=False,get_box_label=True,num_workers=2,drop_last=False):
 
     loader = DataLoader(dataset=dataset,batch_size=batch_size,shuffle=shuffle,num_workers=num_workers,
                         collate_fn=BatchCollator(is_train=get_box_label),drop_last=drop_last)

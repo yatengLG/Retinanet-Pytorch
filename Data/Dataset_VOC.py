@@ -6,9 +6,9 @@ import numpy as np
 import xml.etree.ElementTree as ET
 from PIL import Image
 
-__all__ = ['VOCDataset']
+__all__ = ['vocdataset']
 
-class VOCDataset(torch.utils.data.Dataset):
+class vocdataset(torch.utils.data.Dataset):
 
     def __init__(self, cfg, is_train=True, data_dir=None, transform=None, target_transform=None, keep_difficult=False):
         """VOC格式数据集
@@ -30,7 +30,7 @@ class VOCDataset(torch.utils.data.Dataset):
         self.target_transform = target_transform
         image_sets_file = os.path.join(self.data_dir, "ImageSets", "Main", "{}.txt".format(self.split))
         # 从train.txt 文件中读取图片 id 返回ids列表
-        self.ids = VOCDataset._read_image_ids(image_sets_file)
+        self.ids = self._read_image_ids(image_sets_file)
         self.keep_difficult = keep_difficult
         self.class_dict = {class_name: i for i, class_name in enumerate(self.class_names)}
 

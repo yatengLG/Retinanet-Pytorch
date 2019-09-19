@@ -5,20 +5,25 @@ import numpy as np
 import torch
 from Utils import corner_form_to_center_form, center_form_to_corner_form
 
-
-
 class priorbox:
     """
     Retainnet anchors, 生成策略与SSD不同
     """
-    def __init__(self,image_size=None, features_maps=None, anchor_sizes=None, ratios=None, scales=None, clip=True):
+    def __init__(self,cfg=None):
         self.features_maps = [(75, 75), (38, 38), (19, 19), (10, 10), (5, 5)]
         self.anchor_sizes = [32, 64, 128, 256, 512]
         self.ratios = np.array([0.5, 1, 2])
         self.scales = np.array([2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)])
-        self.anchor_sizes = [32, 64, 128, 256, 512]
         self.image_size = 600
-        self.clip = clip
+        self.clip = True
+        if cfg:
+            self.features_maps = cfg.MODEL.ANCHORS.FEATURE_MAPS
+            self.anchor_sizes = cfg.MODEL.ANCHORS.SIZES
+            self.ratios = np.array(cfg.MODEL.ANCHORS.RATIOS)
+            self.scales = np.array(cfg.MODEL.ANCHORS.SCALES)
+            self.image_size = cfg.MODEL.INPUT.IMAGE_SIZE
+            self.clip = cfg.MODEL.ANCHORS.CLIP
+
     def __call__(self):
         priors = []
         for k , (feature_map_w, feature_map_h) in enumerate(self.features_maps):

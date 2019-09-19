@@ -4,9 +4,9 @@ from Utils.Boxs_op import center_form_to_corner_form, assign_priors,\
     corner_form_to_center_form, convert_boxes_to_locations
 from Data.Transfroms_utils import *
 
-__all__ = ['Tramsfrom', 'TargetTransform']
+__all__ = ['transfrom', 'targettransform']
 
-class Tramsfrom:
+class transfrom:
     """
     transfroms
     eg:
@@ -17,8 +17,8 @@ class Tramsfrom:
             self.transforms = [
                 ConvertFromInts(),  # 图像数据转float32
                 PhotometricDistort(),   # 光度畸变,对比度,亮度,光噪声,色调,饱和等(详情看函数,有详细备注.)
-                # SubtractMeans(cfg.MODEL.INPUT.PIXEL_MEAN),  # 减均值
-                # DivideStds(cfg.MODEL.INPUT.PIXEL_STD),    # 除方差
+                SubtractMeans(cfg.DATA.PIXEL_MEAN),  # 减均值
+                DivideStds(cfg.DATA.PIXEL_STD),    # 除方差
                 Expand(), # 随机扩充
                 RandomSampleCrop(), # 随机交兵比裁剪
                 RandomMirror(),     # 随机镜像
@@ -30,7 +30,8 @@ class Tramsfrom:
         else:
             self.transforms = [
                 Resize(cfg.MODEL.INPUT.IMAGE_SIZE),
-                SubtractMeans(cfg.MODEL.INPUT.PIXEL_MEAN),
+                SubtractMeans(cfg.DATA.PIXEL_MEAN),  # 减均值
+                DivideStds(cfg.DATA.PIXEL_STD),  # 除方差
                 ToTensor()
             ]
 
@@ -40,7 +41,7 @@ class Tramsfrom:
         return img, boxes, labels
 
 
-class TargetTransform:
+class targettransform:
     """
     targets_transfroms
     eg:
