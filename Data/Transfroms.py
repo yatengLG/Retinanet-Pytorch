@@ -63,8 +63,11 @@ class targettransform:
         if type(gt_labels) is np.ndarray:
             gt_labels = torch.from_numpy(gt_labels)
         boxes, labels = assign_priors(gt_boxes, gt_labels,
-                                                self.corner_form_priors, self.iou_threshold)
+                                      self.corner_form_priors,
+                                      self.iou_threshold)
         boxes = corner_form_to_center_form(boxes)
-        locations = convert_boxes_to_locations(boxes, self.center_form_priors, self.center_variance,
-                                                         self.size_variance)
+        locations = convert_boxes_to_locations(boxes,
+                                               self.center_form_priors,
+                                               self.center_variance,
+                                               self.size_variance)
         return locations, labels
