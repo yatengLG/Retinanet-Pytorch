@@ -12,7 +12,7 @@ import torch
 #     print(labels.size())
 #     if i ==1:
 #         break
-
+import torchvision.models.resnet
 net = RetainNet(cfg).cuda()
 x = torch.randn((2,3,600,600)).cuda()
 y = net.forward_with_postprocess(x)

@@ -25,7 +25,7 @@ class multiboxloss(nn.Module):
             self.num_classes = num_classes
 
         self.loc_loss_fn = nn.SmoothL1Loss(reduction='sum')
-        self.cls_loss_fn = focal_loss(alpha=self.alpha, gamma=self.gamma, num_classes=self.num_classes, size_average=False)  # 类别损失为focal loss
+        self.cls_loss_fn = focal_loss(alpha=self.alpha, gamma=self.gamma, num_classes=self.num_classes, reduction='sum')    # 类别损失为focal loss
         print(" --- Multiboxloss : α={} γ={} num_classes={}".format(self.alpha, self.gamma, self.num_classes))
 
     def forward(self, confidence, predicted_locations, labels, gt_locations):

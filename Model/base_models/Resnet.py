@@ -224,7 +224,7 @@ class ResNet(nn.Module):
         print(' --- load weight finish --- ')
 
 
-def build_resnet(arch, pretrained=False, **kwargs):
+def build_resnet(arch, pretrained=True, **kwargs):
     assert arch in ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152']
     resnets={
         'resnet18':[BasicBlock, [2, 2, 2, 2]],
