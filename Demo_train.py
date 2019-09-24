@@ -28,10 +28,7 @@ if __name__ == '__main__':
     net = RetainNet(cfg)
     # 将模型移动到gpu上,cfg.DEVICE.MAINDEVICE定义了模型所使用的主GPU
     net.to(cfg.DEVICE.MAINDEVICE)
-
     # 初始化训练器,训练器参数通过cfg进行配置;也可传入参数进行配置,但不建议
     trainer = Trainer(cfg)
-
-    print(trainer.optimizer)
     # 训练器开始在 数据集上训练模型
     trainer(net, train_dataset)
