@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # 将模型移动到gpu上,cfg.DEVICE.MAINDEVICE定义了模型所使用的主GPU
     net.to(cfg.DEVICE.MAINDEVICE)
     # 模型从权重文件中加载权重
-    net.load_pretrained_weight('Weights/pretrained/vgg_ssd300_voc0712.pkl')
+    net.load_pretrained_weight('XXX.pkl')
     # 初始化验证器,验证器参数通过cfg进行配置;也可传入参数进行配置,但不建议
     evaler = Evaler(cfg, eval_devices=None)
     # 验证器开始在数据集上验证模型
