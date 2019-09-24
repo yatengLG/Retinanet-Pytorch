@@ -18,7 +18,7 @@ _C.DEVICE = CN()
 
 _C.DEVICE.MAINDEVICE = 'cuda:0' # 主gpu
 _C.DEVICE.TRAIN_DEVICES = [0,1] # 训练gpu
-_C.DEVICE.TEST_DEVICES = [0,1]  # 检测gpu
+_C.DEVICE.TEST_DEVICES = [0, 1]  # 检测gpu
 
 _C.MODEL = CN()
 _C.MODEL.BASEMODEL = 'resnet50' # 现支持 resnet18, resnet34, resnet50, resnet101, resnet152
@@ -41,7 +41,7 @@ _C.TRAIN = CN()
 
 _C.TRAIN.NEG_POS_RATIO = 3      # 负正例比例
 _C.TRAIN.MAX_ITER = 120000      # 训练轮数
-_C.TRAIN.BATCH_SIZE = 10        # 训练批次
+_C.TRAIN.BATCH_SIZE = 20        # 训练批次
 
 _C.MULTIBOXLOSS = CN()
 _C.MULTIBOXLOSS.ALPHA = 0.25    # focal loss 阿尔法参数,用于调节背景与目标比例
