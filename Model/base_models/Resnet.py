@@ -1,22 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Author  : LG
 import torch.nn as nn
-from torch.utils.model_zoo import load_url
+import torch
 from torch.nn import functional as F
 import wget
 import os
 from Configs import _C as cfg
 
 __all__ = ['build_resnet']
-
-
-model_urls = {
-    'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
-    'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
-    'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
-    'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
-    'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
-}
 
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
     """3x3 convolution with padding"""
@@ -114,10 +105,21 @@ class Bottleneck(nn.Module):
 
 class ResNet(nn.Module):
 
-    def __init__(self, block, layers, zero_init_residual=False,
+    def __init__(self, arch, zero_init_residual=False,
                  groups=1, width_per_group=64, replace_stride_with_dilation=None,
                  norm_layer=None):
         super(ResNet, self).__init__()
+        resnets = {
+            'resnet18': [BasicBlock, [2, 2, 2, 2]],
+            'resnet34': [BasicBlock, [3, 4, 6, 3]],
+            'resnet50': [Bottleneck, [3, 4, 6, 3]],
+            'resnet101': [Bottleneck, [3, 4, 23, 3]],
+            'resnet152': [Bottleneck, [3, 8, 36, 3]],
+        }
+        block = resnets[arch][0]
+        layers = resnets[arch][1]
+
+        self.arch = arch
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         self._norm_layer = norm_layer
@@ -207,7 +209,15 @@ class ResNet(nn.Module):
         return c3, c4, c5, p6, p7
 
     def load_weights(self):
-        url = model_urls['resnet18']
+        model_urls = {
+            'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
+            'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
+            'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
+            'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
+            'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
+        }
+
+        url = model_urls[self.arch]
         weight_name = url.split('/')[-1]
         weight_path = cfg.FILE.PRETRAIN_WEIGHT_ROOT
         weight_file = os.path.join(weight_path, weight_name)
@@ -226,16 +236,7 @@ class ResNet(nn.Module):
 
 def build_resnet(arch, pretrained=True, **kwargs):
     assert arch in ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152']
-    resnets={
-        'resnet18':[BasicBlock, [2, 2, 2, 2]],
-        'resnet34':[BasicBlock, [3, 4, 6, 3]],
-        'resnet50': [Bottleneck, [3, 4, 6, 3]],
-        'resnet101': [Bottleneck, [3, 4, 23, 3]],
-        'resnet152': [Bottleneck, [3, 8, 36, 3]],
-    }
-    block = resnets[arch][0]
-    layers = resnets[arch][1]
-    model = ResNet(block, layers, **kwargs)
+    model = ResNet(arch, **kwargs)
     if pretrained:
         model.load_weights()
     return model

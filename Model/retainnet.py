@@ -27,7 +27,6 @@ class RetainNet(nn.Module):
             self.num_anchors = cfg.MODEL.ANCHORS.NUMS
         if resnet:
             self.resnet = resnet
-
         expansion_list={
             'resnet18': 1,
             'resnet34': 1,
@@ -37,7 +36,7 @@ class RetainNet(nn.Module):
         }
         assert self.resnet in expansion_list
 
-        self.backbone = build_resnet(self.resnet)
+        self.backbone = build_resnet(self.resnet, pretrained=True)
         expansion = expansion_list[self.resnet]
         self.fpn = fpn(channels_of_fetures=[128*expansion, 256*expansion, 512*expansion])
         self.predictor = predictor(num_anchors=self.num_anchors, num_classes=self.num_classes)  # num_anchors 默认为9,与anchor生成相对应
