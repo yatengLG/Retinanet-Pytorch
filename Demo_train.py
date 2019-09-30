@@ -23,7 +23,9 @@ if __name__ == '__main__':
     命令行 输入  pip install visdom          进行安装 
     输入        python -m visdom.server'    启动
     """
-
+  
+    # 首次调用会下载resnet预训练模型
+    
     # 实例化模型. 模型的具体各种参数在Config文件中进行配置
     net = RetainNet(cfg)
     # 将模型移动到gpu上,cfg.DEVICE.MAINDEVICE定义了模型所使用的主GPU
