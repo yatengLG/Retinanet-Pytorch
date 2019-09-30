@@ -17,8 +17,8 @@ _C.FILE.MODEL_SAVE_ROOT = project_root+'/Weights/trained'           # 训练模�
 _C.DEVICE = CN()
 
 _C.DEVICE.MAINDEVICE = 'cuda:0' # 主gpu
-_C.DEVICE.TRAIN_DEVICES = [0] # 训练gpu   多卡训练,直接改成[0,1,2]即可使用前三块gpu,亦可分开指定,如使用[1,2,6]GPU
-_C.DEVICE.TEST_DEVICES = [0]  # 检测gpu
+_C.DEVICE.TRAIN_DEVICES = [0,1] # 训练gpu
+_C.DEVICE.TEST_DEVICES = [0, 1]  # 检测gpu
 
 _C.MODEL = CN()
 _C.MODEL.BASEMODEL = 'resnet50' # 现支持 resnet18, resnet34, resnet50, resnet101, resnet152
@@ -28,8 +28,8 @@ _C.MODEL.INPUT.IMAGE_SIZE = 600 # 模型输入尺寸
 
 _C.MODEL.ANCHORS = CN()
 _C.MODEL.ANCHORS.FEATURE_MAPS = [(75, 75), (38, 38), (19, 19), (10, 10), (5, 5)]  # fpn输出的特征图大小
-_C.MODEL.ANCHORS.SIZES = [32, 64, 128, 256, 512]    # 不同特征图对应的anchor基础尺寸
-_C.MODEL.ANCHORS.NUMS = 9   # 每个特征点对应的anchor数量
+_C.MODEL.ANCHORS.SIZES = [32, 64, 128, 256, 512]
+_C.MODEL.ANCHORS.NUMS = 9
 _C.MODEL.ANCHORS.RATIOS = [0.5, 1, 2]    # 不同特征图上检测框绘制比例
 _C.MODEL.ANCHORS.SCALES = [2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]    # 不同特征图上检测框绘制比例
 _C.MODEL.ANCHORS.CLIP = True            # 越界检测框截断,0~1
@@ -76,7 +76,7 @@ _C.DATA.DATASET.CLASS_NAME = ('__background__', 'aeroplane', 'bicycle', 'bird', 
                               'dog', 'horse', 'motorbike', 'person', 'pottedplant',
                               'sheep', 'sofa', 'train', 'tvmonitor')
 
-_C.DATA.DATASET.DATA_DIR = '/home/XXX/VOCdevkit/VOC2007'   # 数据集voc格式,根目录
+_C.DATA.DATASET.DATA_DIR = '/home/super/VOC_det/VOCdevkit/VOC2007'   # 数据集voc格式,根目录
 _C.DATA.DATASET.TRAIN_SPLIT = 'train'   # 训练集,对应于 /VOCdevkit/VOC2007/ImageSets/Main/train.txt'
 _C.DATA.DATASET.TEST_SPLIT = 'val'      # 测试集,对应于 /VOCdevkit/VOC2007/ImageSets/Main/val.txt'
 _C.DATA.PIXEL_MEAN = [0, 0, 0]  #数据集均值   用于数据增强部分,依数据集修改即可

@@ -26,6 +26,7 @@
 4. Vizer
 5. visdom
 
+(均可pip安装)
 
 ## 项目结构
 
