@@ -89,4 +89,3 @@ _C.STEP = CN()
 _C.STEP.VIS_STEP = 10           # visdom可视化训练过程,打印步长
 _C.STEP.MODEL_SAVE_STEP = 1000  # 训练过程中,模型保存步长
 _C.STEP.EVAL_STEP = 1000        # 在训练过程中,并没有进行检测流程,建议保存模型后另外检测
-
