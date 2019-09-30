@@ -12,7 +12,7 @@ _C.FILE = CN()
 
 _C.FILE.PRETRAIN_WEIGHT_ROOT = project_root+'/Weights/pretrained'   # 会使用到的预训练模型
 _C.FILE.MODEL_SAVE_ROOT = project_root+'/Weights/trained'           # 训练模型的保存
-# _C.FILE.VGG16_WEIGHT = 'vgg16_reducedfc.pth'                        # vgg预训练模型
+# _C.FILE.VGG16_WEIGHT = 'vgg16_reducedfc.pth'                      # vgg预训练模型
 
 _C.DEVICE = CN()
 
