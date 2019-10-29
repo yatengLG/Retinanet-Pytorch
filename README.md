@@ -64,7 +64,7 @@
 
 本项目配有训练,验证,检测部分的代码,所有Demo均经过测试,可直接运行.
 
-## 2.1 训练train
+## 训练train
 
 同[针对单机多卡环境的SSD目标检测算法实现(Single Shot MultiBox Detector)(简单,明了,易用,中文注释)](https://ptorch.com/news/252.html)一样,项目**使用visdom进行训练过程可视化**.在运行前请安装并运行visdom.
 
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     trainer(net, train_dataset)
 ```
 
-## 2.2 验证eval
+## 验证eval
 验证过程支持单机多卡,单机单卡,不支持cpu.
 
 ```python
@@ -148,11 +148,11 @@ if __name__ == '__main__':
     print(map)
 ```
 
-## 2.3 检测Detect
+## 检测Detect
 
 单次检测过程支持单机单卡,cpu.
 
-### 2.3.1 单张图片检测
+### 单张图片检测
 
 ```python 
 # -*- coding: utf-8 -*-
@@ -179,7 +179,7 @@ plt.show()
 
 ```
 
-### 2.3.2 视频检测
+### 视频检测
 
 ```python
 # -*- coding: utf-8 -*-
