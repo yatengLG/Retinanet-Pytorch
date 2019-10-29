@@ -46,7 +46,7 @@
 | | structs/PostProcess|后处理|
 | | structs/Predictor|分类及回归网络|
 | | evaler |验证器,用于在数据集上对模型进行验证(测试),计算ap,map |
-| | ssd_model|SSD模型类 |
+| | retainnet|Retinanet模型类 |
 | | trainer|训练器,用于在数据集上训练模型 |
 | **Utils**|各种工具|
 | |boxs_op |各种框体操作,编码解码,IOU计算,框体格式转换等|
@@ -58,3 +58,147 @@
 | ---- | Demo_eval.py| 模型测试的例子,计算模型ap,map |
 | ---- | Demo_detect_one_image.py|检测单张图片例子|
 | ---- | Demo_detect_video.py|视频检测例子,传入一个视频,进行检测|
+
+
+# Demo
+
+本项目配有训练,验证,检测部分的代码,所有Demo均经过测试,可直接运行.
+
+## 2.1 训练train
+
+同[针对单机多卡环境的SSD目标检测算法实现(Single Shot MultiBox Detector)(简单,明了,易用,中文注释)](https://ptorch.com/news/252.html)一样,项目**使用visdom进行训练过程可视化**.在运行前请安装并运行visdom.
+
+同样的,训练过程也只支持单机单卡或单机多卡环境,不支持cpu训练.
+
+```python
+
+# -*- coding: utf-8 -*-
+# @Author  : LG
+
+from Model import RetainNet, Trainer
+from Data import vocdataset
+from Configs import _C as cfg
+from Data import transfrom,targettransform
+
+
+# 训练数据集,VOC格式数据集, 训练数据取自 ImageSets/Main/train.txt'
+train_dataset=vocdataset(cfg, is_train=True, transform=transfrom(cfg,is_train=True),
+                         target_transform=targettransform(cfg))
+
+# 测试数据集,VOC格式数据集, 测试数据取自 ImageSets/Main/eval.txt'
+test_dataset = vocdataset(cfg=cfg, is_train=False,
+                          transform=transfrom(cfg=cfg, is_train=False),
+                          target_transform=targettransform(cfg))
+
+if __name__ == '__main__':
+    """
+    使用时,请先打开visdom
+    
+    命令行 输入  pip install visdom          进行安装 
+    输入        python -m visdom.server'    启动
+    """
+  
+    # 首次调用会下载resnet预训练模型
+    
+    # 实例化模型. 模型的具体各种参数在Config文件中进行配置
+    net = RetainNet(cfg)
+    # 将模型移动到gpu上,cfg.DEVICE.MAINDEVICE定义了模型所使用的主GPU
+    net.to(cfg.DEVICE.MAINDEVICE)
+    # 初始化训练器,训练器参数通过cfg进行配置;也可传入参数进行配置,但不建议
+    trainer = Trainer(cfg)
+    # 训练器开始在 数据集上训练模型
+    trainer(net, train_dataset)
+```
+
+## 2.2 验证eval
+验证过程支持单机多卡,单机单卡,不支持cpu.
+
+```python
+# -*- coding: utf-8 -*-
+# @Author  : LG
+
+from Model import RetainNet, Evaler
+from Data import vocdataset
+from Configs import _C as cfg
+from Data import transfrom,targettransform
+
+
+# 训练数据集,VOC格式数据集, 训练数据取自 ImageSets/Main/train.txt'
+train_dataset=vocdataset(cfg, is_train=True, transform=transfrom(cfg,is_train=True),
+                         target_transform=targettransform(cfg))
+
+# 测试数据集,VOC格式数据集, 测试数据取自 ImageSets/Main/eval.txt'
+test_dataset = vocdataset(cfg=cfg, is_train=False,
+                          transform=transfrom(cfg=cfg, is_train=False),
+                          target_transform=targettransform(cfg))
+
+if __name__ == '__main__':
+    # 模型测试只支持GPU单卡或多卡,不支持cpu
+    net = RetainNet(cfg)
+    # 将模型移动到gpu上,cfg.DEVICE.MAINDEVICE定义了模型所使用的主GPU
+    net.to(cfg.DEVICE.MAINDEVICE)
+    # 模型从权重文件中加载权重
+    net.load_pretrained_weight('XXX.pkl')
+    # 初始化验证器,验证器参数通过cfg进行配置;也可传入参数进行配置,但不建议
+    evaler = Evaler(cfg, eval_devices=None)
+    # 验证器开始在数据集上验证模型
+    ap, map = evaler(model=net,
+                     test_dataset=test_dataset)
+    print(ap)
+    print(map)
+```
+
+## 2.3 检测Detect
+
+单次检测过程支持单机单卡,cpu.
+
+### 2.3.1 单张图片检测
+
+```python 
+# -*- coding: utf-8 -*-
+# @Author  : LG
+from Model import RetainNet
+from Configs import _C as cfg
+from PIL import Image
+from matplotlib import pyplot as plt
+
+# 实例化模型
+net = RetainNet(cfg)
+# 使用cpu或gpu
+net.to('cuda')
+# 模型从权重文件中加载权重
+net.load_pretrained_weight('XXX.pkl')
+# 打开图片
+image = Image.open("XXX.jpg")
+# 进行检测, 分别返回 绘制了检测框的图片数据/回归框/标签/分数.
+drawn_image, boxes, labels, scores = net.Detect_single_img(image=image,score_threshold=0.5)
+
+plt.imsave('XXX_det.jpg',drawn_image)
+plt.imshow(drawn_image)
+plt.show()
+
+```
+
+### 2.3.2 视频检测
+
+```python
+# -*- coding: utf-8 -*-
+# @Author  : LG
+from Model import RetainNet
+from Configs import _C as cfg
+
+# 实例化模型
+net = RetainNet(cfg)
+# 使用cpu或gpu
+net.to('cuda')
+# 模型从权重文件中加载权重
+net.load_pretrained_weight('XXX.pkl')
+
+video_path = 'XXX.mp4'
+
+# 进行检测,
+# if save_video_path不为None,则不保存视频,如需保存视频save_video_path=XXX.mp4 ,
+# show=True,实时显示检测结果
+net.Detect_video(video_path=video_path, score_threshold=0.02, save_video_path=None, show=True)
+
+```
