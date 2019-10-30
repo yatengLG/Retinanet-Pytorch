@@ -1,5 +1,3 @@
-# Retinanet-Pytorch
-
 GIthub使用指北:
 
 **1.想将项目拷贝到自己帐号下就fork一下.**
@@ -9,6 +7,8 @@ GIthub使用指北:
 **3.watch是设置接收邮件提醒的.**
 
 ---
+
+# Retinanet-Pytorch
 
 [Retinanet](https://arxiv.org/abs/1708.02002)目标检测算法pytorch实现,
 
