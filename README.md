@@ -1,5 +1,15 @@
 # Retinanet-Pytorch
 
+GIthub使用指北:
+
+**1.想将项目拷贝到自己帐号下就fork一下.**
+
+**2.持续关注项目更新就star一下**
+
+**3.watch是设置接收邮件提醒的.**
+
+---
+
 [Retinanet](https://arxiv.org/abs/1708.02002)目标检测算法pytorch实现,
 
 由于一些原因,训练已经过测试,但是并没有训练完毕,所以不会上传预训练模型.
