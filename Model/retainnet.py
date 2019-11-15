@@ -21,6 +21,7 @@ class RetainNet(nn.Module):
         self.resnet = 'resnet50'
         self.num_classes = 21
         self.num_anchors = 9
+        self.cfg = cfg
         if cfg:
             self.resnet = cfg.MODEL.BASEMODEL
             self.num_classes = cfg.DATA.DATASET.NUM_CLASSES
