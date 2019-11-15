@@ -41,6 +41,10 @@ class RetainNet(nn.Module):
         self.fpn = fpn(channels_of_fetures=[128*expansion, 256*expansion, 512*expansion])
         self.predictor = predictor(num_anchors=self.num_anchors, num_classes=self.num_classes)  # num_anchors 默认为9,与anchor生成相对应
         self.postprocessor = postprocessor(cfg)
+        
+    def load_pretrained_weight(self, weight_pkl):
+        self.load_state_dict(torch.load(weight_pkl))
+        
     def forward(self, x):
         c3, c4, c5, p6, p7 = self.backbone(x)   # resnet输出五层特征图
         p3, p4, p5 = self.fpn([c3, c4, c5])     # 前三层特征图进FPN
