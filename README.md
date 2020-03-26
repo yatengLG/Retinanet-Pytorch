@@ -214,3 +214,13 @@ video_path = 'XXX.mp4'
 net.Detect_video(video_path=video_path, score_threshold=0.02, save_video_path=None, show=True)
 
 ```
+
+---
+
+support by **jetbrains**.
+
+<img width='300' alt='Jetbrains' src='https://github.com/yatengLG/SSD-Pytorch/blob/master/Images/jetbrains-variant-3.png'>
+
+https://www.jetbrains.com/?from=SSD-Pytorch
+
+---
