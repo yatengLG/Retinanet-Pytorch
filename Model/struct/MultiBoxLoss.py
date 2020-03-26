@@ -58,7 +58,7 @@ class multiboxloss(nn.Module):
         gt_locations = gt_locations[pos_mask, :].view(-1, 4)
         smooth_l1_loss = self.loc_loss_fn(predicted_locations, gt_locations)
         num_pos = gt_locations.size(0)
-        return smooth_l1_loss / num_pos, classification_loss / num_pos
+        return smooth_l1_loss / num_pos, classification_loss / (num_pos * self.neg_pos_ratio)
 
 def hard_negative_mining(loss, labels, neg_pos_ratio=3):
     """
