@@ -77,7 +77,7 @@ _C.DATA.DATASET.CLASS_NAME = ('__background__', 'aeroplane', 'bicycle', 'bird', 
                               'sheep', 'sofa', 'train', 'tvmonitor')
 
 
-_C.DATA.DATASET.DATA_DIR = '/home/super/VOC_det/VOCdevkit/VOC2007'   # 数据集voc格式,根目录
+_C.DATA.DATASET.DATA_DIR = '/home/XXX/VOC_det/VOCdevkit/VOC2007'   # 数据集voc格式,根目录   请更改为自己的目录
 _C.DATA.DATASET.TRAIN_SPLIT = 'train'   # 训练集,对应于 /VOCdevkit/VOC2007/ImageSets/Main/train.txt'
 _C.DATA.DATASET.TEST_SPLIT = 'val'      # 测试集,对应于 /VOCdevkit/VOC2007/ImageSets/Main/val.txt'
 _C.DATA.PIXEL_MEAN = [0, 0, 0]  #数据集均值   用于数据增强部分,依数据集修改即可
