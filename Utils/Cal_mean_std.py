@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : LG
-# 计算数据集均值方差
+# 计算数据集均值方差，如果你是自己的数据集，可以使用这部分代码计算数据集的均值方差
 import numpy as np
 import os
 from PIL import Image

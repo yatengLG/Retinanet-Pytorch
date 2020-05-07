@@ -12,9 +12,11 @@ GIthub使用指北:
 
 [Retinanet](https://arxiv.org/abs/1708.02002)目标检测算法pytorch实现,
 
+**本项目不是完全的复现论文**（很多参数以及实现方式上与原论文存在部分差异，有疑问欢迎issues）
+
 由于一些原因,训练已经过测试,但是并没有训练完毕,所以不会上传预训练模型.
 
-但项目代码验证无误.
+但项目代码验证无误.（但在使用时需要自己进行调整。不建议新手进行尝试。）
 ***
 项目在架构上与 [SSD-Pytorch](https://github.com/yatengLG/SSD-Pytorch) 采用了相似的结构.
 
@@ -211,3 +213,13 @@ video_path = 'XXX.mp4'
 net.Detect_video(video_path=video_path, score_threshold=0.02, save_video_path=None, show=True)
 
 ```
+
+---
+
+support by **jetbrains**.
+
+<img width='300' alt='Jetbrains' src='https://github.com/yatengLG/SSD-Pytorch/blob/master/Images/jetbrains-variant-3.png'>
+
+https://www.jetbrains.com/?from=SSD-Pytorch
+
+---
