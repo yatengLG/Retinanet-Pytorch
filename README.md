@@ -164,7 +164,7 @@ if __name__ == '__main__':
 
 ### 单张图片检测
 
-```python 
+```python
 # -*- coding: utf-8 -*-
 # @Author  : LG
 from Model import RetainNet
@@ -186,7 +186,6 @@ drawn_image, boxes, labels, scores = net.Detect_single_img(image=image,score_thr
 plt.imsave('XXX_det.jpg',drawn_image)
 plt.imshow(drawn_image)
 plt.show()
-
 ```
 
 ### 视频检测
