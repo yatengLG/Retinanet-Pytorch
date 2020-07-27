@@ -136,6 +136,9 @@ class Trainer(object):
 
             if iteration % self.model_save_step == 0:
                 torch.save(model.module.state_dict(), '{}/model_{}.pkl'.format(self.model_save_root, iteration))
+            
+            if iteration > self.iterations:
+                break
         return True
 
     def set_optimizer(self, lr=None, momentum=None, weight_decay=None):
